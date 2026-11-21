@@ -277,7 +277,7 @@ button{color:inherit;}
 
 /* 今日目标 */
 .daily-card{
-  position:absolute;left:26px;top:50%;transform:translateY(-50%);z-index:6;
+  position:absolute;left:26px;top:70px;z-index:6;
   width:156px;padding:13px 13px 11px;border-radius:20px;
   background:rgba(255,255,255,.66);
   border:1px solid rgba(255,255,255,.95);
@@ -393,8 +393,8 @@ button{color:inherit;}
 }
 
 .nameplate{
-  position:absolute;left:50%;bottom:70px;transform:translateX(-50%);
-  z-index:6;width:272px;
+  position:absolute;left:26px;top:50%;transform:translateY(-50%);
+  z-index:6;width:230px;
   padding:11px 15px 10px;border-radius:18px;
   background:rgba(255,255,255,.66);
   border:1px solid rgba(255,255,255,.9);
@@ -1346,7 +1346,7 @@ body.desktop-mode .pet-position:hover .pet-svg{filter:drop-shadow(0 26px 34px rg
 @media (max-width:1240px){
   .panel{flex-basis:376px;width:376px;}
   .pet-position{width:330px;height:330px;}
-  .nameplate{width:250px;bottom:70px;}
+  .nameplate{width:210px;}
   .top-actions .chip:nth-child(2){display:none;}
 }
 @media (max-width:1060px){
@@ -1453,6 +1453,7 @@ body.desktop-mode .pet-position:hover .pet-svg{filter:drop-shadow(0 26px 34px rg
   }
   .bubble-tail{bottom:-7px;width:14px;height:14px;}
   .nameplate{
+    left:50%;top:auto;transform:translateX(-50%);
     width:196px;bottom:8px;padding:8px 11px 7px;border-radius:14px;
   }
   .nameplate-main b{font-size:12.5px;}
