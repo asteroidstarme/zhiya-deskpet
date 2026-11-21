@@ -1,10 +1,10 @@
 /* 知芽 PWA service worker · 手机安装后可离线打开 */
-const CACHE = 'zhiya-shell-v4';
+const CACHE = 'zhiya-shell-v5';
 const ASSETS = [
   './',
   './index.html',
-  './styles.css?v=4',
-  './app.js?v=4',
+  './styles.css?v=5',
+  './app.js?v=5',
   './manifest.webmanifest',
   './assets/icon-192.png',
   './assets/icon-512.png',
