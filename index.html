@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>知芽 Sprout · 桌面学习搭子</title>
+<meta name="theme-color" content="#fff7fb">
+<meta name="description" content="知芽是一款会跟着答题成绩长大的学习桌宠。2.5D 立体形象、角色皮肤、道具互动、宠物乐园联机、语音答疑，扫码安装到手机主屏幕。">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="知芽">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="stylesheet" href="styles.css?v=4">
+</head>
+<body data-theme="strawberry" data-eye="violet">
+
+<div class="wallpaper" aria-hidden="true">
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+  <div class="blob blob-c"></div>
+  <div class="wall-grid"></div>
+</div>
+
+<div class="app" id="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 21v-7.5"/>
+          <path d="M12 14C7.2 14 4.2 10.8 4.5 6.2 9.2 5.8 12 9 12 14Z" fill="currentColor" stroke="none" opacity=".9"/>
+          <path d="M12 16c4.6 0 7.4-2.9 7.2-7.3-4.4-.4-7.2 2.5-7.2 7.3Z" fill="currentColor" stroke="none" opacity=".65"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>知芽 <em>SPROUT</em></h1>
+        <p>糯糯 · 你的桌面学习搭子</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div class="chip"><i class="dot"></i>应用1 · 已连接</div>
+      <div class="chip"><i class="dot"></i>应用2 · 已连接</div>
+      <button class="ghost-btn download-btn" id="downloadBtn" title="扫码下载知芽">📥 下载</button>
+      <button class="ghost-btn mobile-install" id="installBtn" title="安装到手机主屏幕">📲 安装</button>
+      <button class="ghost-btn" id="desktopModeBtn" title="隐藏面板，只留桌宠">🖥️ 桌面模式</button>
+      <button class="ghost-btn" id="panelToggleBtn" title="收起 / 打开面板">收起面板</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="stage" id="stage">
+      <div class="stage-decor" aria-hidden="true">
+        <div class="sunbeam"></div>
+        <div class="halo-circle hc1"></div>
+        <div class="halo-circle hc2"></div>
+        <div class="tiny-star ts1">✦</div>
+        <div class="tiny-star ts2">✦</div>
+        <div class="tiny-star ts3">✧</div>
+        <div class="desk-line"></div>
+      </div>
+
+      <div class="stage-tip" id="stageTip">拖动我 · 单击摸摸头 · 双击打开面板</div>
+
+      <aside class="daily-card" id="dailyCard" aria-label="今日学习目标">
+        <div class="daily-head"><span>今日目标</span><b id="dailyCount">0 / 15</b></div>
+        <div class="daily-ring" id="dailyRing" style="--p:0">
+          <div class="daily-ring-in"><span id="dailyPct">0%</span><small>完成</small></div>
+        </div>
+        <div class="daily-meta">
+          <span>最佳连对 <b id="dailyBest">3</b></span>
+          <span class="daily-gold">+<b id="dailyXp">0</b> XP</span>
+        </div>
+      </aside>
+
+      <div class="desktop-clock" id="desktopClock" aria-hidden="true">
+        <b id="desktopTime">--:--</b>
+        <span id="desktopDate">--</span>
+      </div>
+
+      <div class="desktop-entry" id="desktopEntry">
+        <span class="de-dot"></span>
+        点击糯糯，进入知芽
+        <b>↗</b>
+      </div>
+
+      <div class="pet-zone" id="petZone">
+        <div class="lv-pill" id="lvPill">
+          <span class="lv-star">✦</span>
+          <span>Lv.<b id="lvPillNum">3</b></span>
+          <span class="lv-form" id="lvPillForm">嫩芽团</span>
+        </div>
+
+        <div class="bubble" id="bubble" role="status" aria-live="polite">
+          <p id="bubbleText">今天也一起加油吧～</p>
+          <span class="bubble-tail"></span>
+        </div>
+
+        <div class="pet-position" id="petPosition">
+          <div class="pet-scale" id="petScale">
+            <div class="pet-float">
+
+              <svg id="petSvg" class="pet-svg" viewBox="0 0 360 360" role="img" aria-label="桌宠糯糯">
+                <defs>
+                  <radialGradient id="bodyGrad" cx="35%" cy="24%" r="82%">
+                    <stop offset="0%" class="body-stop-1"/>
+                    <stop offset="55%" class="body-stop-2"/>
+                    <stop offset="100%" class="body-stop-3"/>
+                  </radialGradient>
+                  <radialGradient id="bellyGrad" cx="50%" cy="40%" r="60%">
+                    <stop offset="0%" stop-color="#FFFFFF" stop-opacity=".6"/>
+                    <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+                  </radialGradient>
+                  <radialGradient id="irisGrad" cx="42%" cy="30%" r="72%">
+                    <stop offset="0%" class="eye-stop-1"/>
+                    <stop offset="58%" class="eye-stop-2"/>
+                    <stop offset="100%" class="eye-stop-3"/>
+                  </radialGradient>
+                  <radialGradient id="auraGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#FFD7F0" stop-opacity=".55"/>
+                    <stop offset="65%" stop-color="#D9C8FF" stop-opacity=".18"/>
+                    <stop offset="100%" stop-color="#D9C8FF" stop-opacity="0"/>
+                  </radialGradient>
+                  <linearGradient id="bowGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#FFB3CE"/>
+                    <stop offset="1" stop-color="#FF7FAE"/>
+                  </linearGradient>
+                  <linearGradient id="crystalGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#FFFDFF"/>
+                    <stop offset=".45" stop-color="#D9C8FF"/>
+                    <stop offset="1" stop-color="#A88BEA"/>
+                  </linearGradient>
+                  <filter id="blur6" x="-60%" y="-60%" width="220%" height="220%">
+                    <feGaussianBlur stdDeviation="6"/>
+                  </filter>
+                  <filter id="blur12" x="-60%" y="-60%" width="220%" height="220%">
+                    <feGaussianBlur stdDeviation="12"/>
+                  </filter>
+                  <filter id="glowGold" x="-80%" y="-80%" width="260%" height="260%">
+                    <feGaussianBlur stdDeviation="5" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                  <clipPath id="petClip">
+                    <ellipse cx="180" cy="182" rx="104" ry="98"/>
+                  </clipPath>
+                  <clipPath id="customClip">
+                    <circle cx="180" cy="180" r="150"/>
+                  </clipPath>
+                </defs>
+
+                <g id="aura">
+                  <circle cx="180" cy="190" r="152" fill="url(#auraGrad)"/>
+                  <ellipse cx="180" cy="190" rx="141" ry="136" fill="none" stroke="#FFC7E6" stroke-opacity=".35" stroke-dasharray="3 11"/>
+                </g>
+
+                <g id="orbitSparkles">
+                  <path class="spark s1" d="M64 132 l3.5 9 9 3.5 -9 3.5 -3.5 9 -3.5 -9 -9 -3.5 9 -3.5z" fill="#FFD6EA"/>
+                  <path class="spark s2" d="M300 170 l2.5 6.5 6.5 2.5 -6.5 2.5 -2.5 6.5 -2.5 -6.5 -6.5 -2.5 6.5 -2.5z" fill="#E3D4FF"/>
+                  <path class="spark s3" d="M290 78 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#FFE9A8"/>
+                </g>
+
+                <!-- 猫猫团：耳朵 + 尾巴 -->
+                <g id="spCatBack">
+                  <path d="M92 148 C80 118 86 90 110 100 C126 107 136 122 139 136 Z" fill="url(#bodyGrad)" stroke="#E8BBD7" class="body-line" stroke-width="3"/>
+                  <path d="M98 138 C89 118 94 98 110 106 C121 112 128 124 131 134 Z" fill="#FFC3DA" class="ear-inner" opacity=".9"/>
+                  <path d="M268 148 C280 118 274 90 250 100 C234 107 224 122 221 136 Z" fill="url(#bodyGrad)" stroke="#E8BBD7" class="body-line" stroke-width="3"/>
+                  <path d="M262 138 C271 118 266 98 250 106 C239 112 232 124 229 134 Z" fill="#FFC3DA" class="ear-inner" opacity=".9"/>
+                  <path d="M274 234 C312 228 334 252 324 280 C318 297 298 303 289 288" fill="none" stroke="#E8BBD7" class="body-line" stroke-width="22" stroke-linecap="round"/>
+                  <path d="M274 234 C312 228 334 252 324 280 C318 297 298 303 289 288" fill="none" stroke="url(#bodyGrad)" stroke-width="16" stroke-linecap="round"/>
+                  <path d="M293 285 C300 294 310 293 315 286" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity=".45"/>
+                </g>
+
+                <!-- 兔兔团：长耳朵 + 绒球尾巴 -->
+                <g id="spBunnyBack">
+                  <path d="M118 106 C98 58 106 22 128 38 C144 50 144 84 137 108 Z" fill="url(#bodyGrad)" stroke="#E8BBD7" class="body-line" stroke-width="3"/>
+                  <path d="M121 100 C108 62 114 34 128 46 C138 55 138 82 133 101 Z" fill="#FFC3DA" class="ear-inner" opacity=".85"/>
+                  <path d="M242 106 C262 58 254 22 232 38 C216 50 216 84 223 108 Z" fill="url(#bodyGrad)" stroke="#E8BBD7" class="body-line" stroke-width="3"/>
+                  <path d="M239 100 C252 62 246 34 232 46 C222 55 222 82 227 101 Z" fill="#FFC3DA" class="ear-inner" opacity=".85"/>
+                  <circle cx="294" cy="250" r="16" fill="#FFF8FC" stroke="#E8BBD7" class="body-line bunny-tail" stroke-width="3"/>
+                  <path d="M286 246 Q294 240 302 246" fill="none" stroke="#F6D8E7" class="bunny-tail-line" stroke-width="2.5" stroke-linecap="round"/>
+                </g>
+
+                <!-- 小鹿团：鹿角 + 耳朵 -->
+                <g id="spDeerBack">
+                  <g fill="none" stroke="#C99A6A" stroke-width="7" stroke-linecap="round">
+                    <path d="M122 112 C108 92 106 70 116 54"/>
+                    <path d="M114 82 C102 76 94 64 96 52"/>
+                    <path d="M110 66 C118 58 122 46 120 36"/>
+                    <path d="M238 112 C252 92 254 70 244 54"/>
+                    <path d="M246 82 C258 76 266 64 264 52"/>
+                    <path d="M250 66 C242 58 238 46 240 36"/>
+                  </g>
+                  <ellipse cx="94" cy="132" rx="16" ry="22" transform="rotate(-26 94 132)" fill="url(#bodyGrad)" stroke="#E8BBD7" class="body-line" stroke-width="3"/>
+                  <ellipse cx="94" cy="132" rx="8" ry="13" transform="rotate(-26 94 132)" fill="#FFC3DA" class="ear-inner" opacity=".8"/>
+                  <ellipse cx="266" cy="132" rx="16" ry="22" transform="rotate(26 266 132)" fill="url(#bodyGrad)" stroke="#E8BBD7" class="body-line" stroke-width="3"/>
+                  <ellipse cx="266" cy="132" rx="8" ry="13" transform="rotate(26 266 132)" fill="#FFC3DA" class="ear-inner" opacity=".8"/>
+                  <path d="M284 238 C298 244 302 258 296 268" fill="none" stroke="#E8BBD7" class="body-line" stroke-width="14" stroke-linecap="round"/>
+                  <path d="M284 238 C298 244 302 258 296 268" fill="none" stroke="url(#bodyGrad)" stroke-width="10" stroke-linecap="round"/>
+                </g>
+
+                <!-- 星灵团：星轨 -->
+                <g id="spStarBack">
+                  <ellipse cx="180" cy="190" rx="132" ry="126" fill="none" stroke="#CBB8FF" stroke-opacity=".55" stroke-width="2" stroke-dasharray="3 9"/>
+                  <path d="M78 208 l3 7 7 3 -7 3 -3 7 -3 -7 -7 -3 7 -3z" fill="#FFF0A8" opacity=".9"/>
+                  <path d="M286 148 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#FFFFFF" opacity=".8"/>
+                </g>
+
+                <g id="floatGroup">
+                  <path id="ahoge" d="M178 102 C172 74 190 50 209 57 C225 63 222 82 208 81" fill="none" stroke="#EFBBD6" class="body-line" stroke-width="7" stroke-linecap="round"/>
+
+                  <ellipse cx="146" cy="272" rx="25" ry="14" class="pet-foot" fill="#F4D6EA" stroke="#E9C2DC" stroke-width="2"/>
+                  <ellipse cx="214" cy="272" rx="25" ry="14" class="pet-foot" fill="#F4D6EA" stroke="#E9C2DC" stroke-width="2"/>
+
+                  <path d="M86 200 C64 202 56 222 68 234 C80 245 94 228 94 212 Z" fill="url(#bodyGrad)" stroke="#EDCBE0" class="body-line" stroke-width="2"/>
+                  <path d="M274 200 C296 202 304 222 292 234 C280 245 266 228 266 212 Z" fill="url(#bodyGrad)" stroke="#EDCBE0" class="body-line" stroke-width="2"/>
+
+                  <ellipse id="petBody" cx="180" cy="182" rx="104" ry="98" fill="url(#bodyGrad)" stroke="#E8BBD7" class="body-line" stroke-width="3"/>
+                  <ellipse cx="180" cy="205" rx="82" ry="66" fill="url(#bellyGrad)"/>
+                  <ellipse cx="180" cy="258" rx="86" ry="24" fill="#DDBDF2" class="pet-shade" opacity=".28" filter="url(#blur12)"/>
+                  <ellipse cx="142" cy="118" rx="40" ry="16" transform="rotate(-26 142 118)" fill="#FFFFFF" opacity=".6" filter="url(#blur6)"/>
+
+                  <g id="face">
+                    <g id="brows" opacity="0">
+                      <path d="M124 146 Q144 136 162 144" stroke="#B985A4" stroke-width="4" fill="none" stroke-linecap="round"/>
+                      <path d="M198 144 Q216 136 236 146" stroke="#B985A4" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    </g>
+
+                    <g id="eyesOpen">
+                      <g class="eye" id="eyeLeft">
+                        <ellipse cx="144" cy="176" rx="17.5" ry="20.5" fill="#FFFFFF" stroke="#F0D5E6" stroke-width="1.5"/>
+                        <g class="pupil">
+                          <ellipse cx="144" cy="176" rx="15" ry="19.5" fill="url(#irisGrad)"/>
+                          <ellipse cx="144" cy="178" rx="6.8" ry="10.5" fill="#2E214E"/>
+                          <circle cx="138.5" cy="167.5" r="4.8" fill="#FFFFFF"/>
+                          <circle cx="149.5" cy="183.5" r="2.5" fill="#FFFFFF" opacity=".9"/>
+                          <path d="M138 189 Q144 192 150 189" stroke="#C9B6FF" stroke-width="2" fill="none" opacity=".8" stroke-linecap="round"/>
+                          <path d="M150 165 l1.4 3.4 3.4 1.4 -3.4 1.4 -1.4 3.4 -1.4 -3.4 -3.4 -1.4 3.4 -1.4z" fill="#FFFFFF" opacity=".95"/>
+                        </g>
+                        <path d="M127 164 L120 158" stroke="#6B4A63" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                        <path d="M125 171 L117 168" stroke="#6B4A63" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                        <path d="M127 178 L120 178" stroke="#6B4A63" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                      </g>
+                      <g class="eye" id="eyeRight">
+                        <ellipse cx="216" cy="176" rx="17.5" ry="20.5" fill="#FFFFFF" stroke="#F0D5E6" stroke-width="1.5"/>
+                        <g class="pupil">
+                          <ellipse cx="216" cy="176" rx="15" ry="19.5" fill="url(#irisGrad)"/>
+                          <ellipse cx="216" cy="178" rx="6.8" ry="10.5" fill="#2E214E"/>
+                          <circle cx="210.5" cy="167.5" r="4.8" fill="#FFFFFF"/>
+                          <circle cx="221.5" cy="183.5" r="2.5" fill="#FFFFFF" opacity=".9"/>
+                          <path d="M210 189 Q216 192 222 189" stroke="#C9B6FF" stroke-width="2" fill="none" opacity=".8" stroke-linecap="round"/>
+                          <path d="M222 165 l1.4 3.4 3.4 1.4 -3.4 1.4 -1.4 3.4 -1.4 -3.4 -3.4 -1.4 3.4 -1.4z" fill="#FFFFFF" opacity=".95"/>
+                        </g>
+                        <path d="M233 164 L240 158" stroke="#6B4A63" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                        <path d="M235 171 L243 168" stroke="#6B4A63" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                        <path d="M233 178 L240 178" stroke="#6B4A63" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                      </g>
+                    </g>
+
+                    <g id="eyesHappy">
+                      <path d="M120 180 Q144 156 168 180" stroke="#513B60" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+                      <path d="M192 180 Q216 156 240 180" stroke="#513B60" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+                    </g>
+
+                    <g id="eyesSleep">
+                      <path d="M120 178 Q144 190 168 178" stroke="#513B60" stroke-width="5" fill="none" stroke-linecap="round"/>
+                      <path d="M192 178 Q216 190 240 178" stroke="#513B60" stroke-width="5" fill="none" stroke-linecap="round"/>
+                      <path d="M166 186 l7 5" stroke="#513B60" stroke-width="3" stroke-linecap="round"/>
+                      <path d="M194 191 l-7 5" stroke="#513B60" stroke-width="3" stroke-linecap="round"/>
+                    </g>
+
+                    <g id="eyesSparkle">
+                      <path d="M144 156 l4.5 12 12 4.5 -12 4.5 -4.5 12 -4.5 -12 -12 -4.5 12 -4.5z" fill="#FFF3A6" filter="url(#glowGold)"/>
+                      <path d="M216 156 l4.5 12 12 4.5 -12 4.5 -4.5 12 -4.5 -12 -12 -4.5 12 -4.5z" fill="#FFF3A6" filter="url(#glowGold)"/>
+                    </g>
+
+                    <g id="eyesLove">
+                      <path d="M144 190 C130 176 132 164 141 163 C147 162 149 168 144 173 C143 168 147 162 153 164 C162 166 157 178 144 190Z" fill="#FF6F9F"/>
+                      <path d="M216 190 C202 176 204 164 213 163 C219 162 221 168 216 173 C215 168 219 162 225 164 C234 166 229 178 216 190Z" fill="#FF6F9F"/>
+                    </g>
+
+                    <g id="blush">
+                      <ellipse cx="113" cy="204" rx="22" ry="11" fill="#FF9DBD" opacity=".5" filter="url(#blur6)"/>
+                      <ellipse cx="247" cy="204" rx="22" ry="11" fill="#FF9DBD" opacity=".5" filter="url(#blur6)"/>
+                      <g stroke="#FF7FA8" stroke-width="2" opacity=".55" stroke-linecap="round">
+                        <path d="M102 201 l-6 6"/><path d="M110 201 l-6 6"/><path d="M118 201 l-6 6"/>
+                        <path d="M258 201 l-6 6"/><path d="M250 201 l-6 6"/><path d="M242 201 l-6 6"/>
+                      </g>
+                    </g>
+
+                    <circle cx="180" cy="202" r="2.2" fill="#E9A0B9" opacity=".55"/>
+
+                    <g id="mouthGroup">
+                      <path id="mouthSmile" d="M168 211 Q180 220 192 211" stroke="#8A4F68" stroke-width="5" fill="none" stroke-linecap="round"/>
+                      <path id="mouthW" d="M168 210 Q174 219 180 211 Q186 219 192 210" stroke="#8A4F68" stroke-width="4" fill="none" stroke-linecap="round"/>
+                      <path id="mouthFlat" d="M172 214 L188 214" stroke="#8A4F68" stroke-width="4" fill="none" stroke-linecap="round"/>
+                      <path id="mouthSad" d="M171 219 Q180 210 189 219" stroke="#8A4F68" stroke-width="4" fill="none" stroke-linecap="round"/>
+                      <path id="mouthSleep" d="M174 215 Q180 219 186 215" stroke="#8A4F68" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                      <g id="mouthOpen">
+                        <ellipse cx="180" cy="215" rx="10" ry="11" fill="#7C4560"/>
+                        <ellipse cx="180" cy="221" rx="7" ry="4.5" fill="#FF9DBD"/>
+                      </g>
+                    </g>
+                  </g>
+
+                  <g id="spCatFront" stroke="#E8A9C8" stroke-width="2" stroke-linecap="round" opacity=".75">
+                    <path d="M110 207 L84 200"/>
+                    <path d="M110 214 L82 214"/>
+                    <path d="M110 221 L84 228"/>
+                    <path d="M250 207 L276 200"/>
+                    <path d="M250 214 L278 214"/>
+                    <path d="M250 221 L276 228"/>
+                  </g>
+
+                  <g id="spDeerFront" fill="#FFF8EA" opacity=".92">
+                    <circle cx="124" cy="142" r="3"/>
+                    <circle cx="137" cy="135" r="2.2"/>
+                    <circle cx="113" cy="154" r="2.5"/>
+                    <circle cx="236" cy="142" r="3"/>
+                    <circle cx="223" cy="135" r="2.2"/>
+                    <circle cx="247" cy="154" r="2.5"/>
+                  </g>
+
+                  <g id="spStarFront">
+                    <path d="M180 32 C184 47 190 53 204 59 C190 65 184 71 180 86 C176 71 170 65 156 59 C170 53 176 47 180 32Z" fill="url(#crystalGrad)" stroke="#C9B2FF" stroke-width="2.5"/>
+                    <path d="M180 40 L180 79" fill="none" stroke="#FFFFFF" stroke-width="1.6" opacity=".6"/>
+                    <path d="M180 124 l2.8 7 7 2.8 -7 2.8 -2.8 7 -2.8 -7 -7 -2.8 7 -2.8z" fill="#FFF0A8" filter="url(#glowGold)"/>
+                    <path d="M112 218 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#FFF0A8" opacity=".85"/>
+                    <path d="M248 218 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#FFF0A8" opacity=".85"/>
+                    <path d="M128 150 l2.5 6 6 2.5 -6 2.5 -2.5 6 -2.5 -6 -6 -2.5 6 -2.5z" fill="#FFF0A8" filter="url(#glowGold)"/>
+                    <path d="M232 150 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#FFFFFF" opacity=".85"/>
+                  </g>
+
+                  <g id="accHeadphones">
+                    <path d="M82 178 C86 96 274 96 278 178" fill="none" stroke="#6C5A93" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M82 178 C86 100 274 100 278 178" fill="none" stroke="#9A87C4" stroke-width="4" stroke-linecap="round" opacity=".7"/>
+                    <ellipse cx="78" cy="196" rx="18" ry="27" fill="#7A67A5" stroke="#5F4D87" stroke-width="3"/>
+                    <ellipse cx="78" cy="196" rx="9" ry="16" fill="#FFB6D3"/>
+                    <ellipse cx="282" cy="196" rx="18" ry="27" fill="#7A67A5" stroke="#5F4D87" stroke-width="3"/>
+                    <ellipse cx="282" cy="196" rx="9" ry="16" fill="#FFB6D3"/>
+                  </g>
+
+                  <g id="accBow" transform="translate(112 96) rotate(-16)">
+                    <path d="M0 0 C-24 -20 -42 -4 -28 12 C-16 24 4 12 0 0Z" fill="url(#bowGrad)" stroke="#F06D9D" stroke-width="2"/>
+                    <path d="M0 0 C24 -20 42 -4 28 12 C16 24 -4 12 0 0Z" fill="url(#bowGrad)" stroke="#F06D9D" stroke-width="2"/>
+                    <circle r="7" fill="#FFE0EC"/>
+                    <circle r="3" fill="#FF7FAE"/>
+                  </g>
+
+                  <g id="accStar" transform="translate(252 102) rotate(12)">
+                    <path d="M0 -20 L5.9 -7.3 19.5 -5.6 9.6 4.3 12 18 0 11.2 -12 18 -9.6 4.3 -19.5 -5.6 -5.9 -7.3Z" fill="#FFD86B" stroke="#F2B33D" stroke-width="2.5" filter="url(#glowGold)"/>
+                    <circle cx="-3" cy="-4" r="2.5" fill="#FFF8CC"/>
+                  </g>
+
+                  <g id="accSprout">
+                    <path d="M207 62 C207 70 208 76 209 80" fill="none" stroke="#77C8A6" stroke-width="4" stroke-linecap="round"/>
+                    <path d="M207 60 C199 48 201 36 212 32 C220 44 218 55 207 60Z" fill="#9BE7C8" stroke="#6DC7A5" stroke-width="2"/>
+                    <path d="M207 60 C218 51 230 53 234 64 C226 74 212 71 207 60Z" fill="#B6F2D8" stroke="#6DC7A5" stroke-width="2"/>
+                    <circle cx="211" cy="39" r="2" fill="#FFFFFF" opacity=".8"/>
+                  </g>
+
+                  <g id="accScarf">
+                    <path d="M112 238 Q180 272 248 238" fill="none" stroke="#FF9DBD" stroke-width="14" stroke-linecap="round"/>
+                    <path d="M228 250 l16 34 l16 -8 l-13 -32" fill="#FF9DBD" stroke="#F06D9D" stroke-width="2" stroke-linejoin="round"/>
+                    <circle cx="180" cy="258" r="8" fill="#FFD86B" stroke="#F0B93D" stroke-width="2"/>
+                    <circle cx="178" cy="256" r="2.2" fill="#FFF6CE"/>
+                  </g>
+
+                  <g id="accHalo">
+                    <ellipse cx="180" cy="58" rx="48" ry="12" fill="none" stroke="#FFE08A" stroke-width="6" filter="url(#glowGold)"/>
+                    <ellipse cx="180" cy="58" rx="48" ry="12" fill="none" stroke="#FFF5C7" stroke-width="2"/>
+                  </g>
+
+                  <!-- 自定义图片形象（大尺寸圆形头像，替换整只桌宠） -->
+                  <g id="customSkinGroup">
+                    <circle cx="180" cy="180" r="152" fill="rgba(255,255,255,.55)"/>
+                    <image id="customSkinImg" x="30" y="30" width="300" height="300" preserveAspectRatio="xMidYMid slice" clip-path="url(#customClip)"/>
+                    <circle cx="180" cy="180" r="150" fill="none" stroke="#FFFFFF" stroke-width="6" opacity=".95"/>
+                    <circle cx="180" cy="180" r="157" fill="none" stroke="var(--accent)" stroke-width="2"/>
+                  </g>
+
+                  <!-- 吟游风：羽毛 + 披风 + 风纹 -->
+                  <g id="outfit-wind" class="outfit-group">
+                    <path d="M142 86 C150 66 170 56 188 60 C178 76 162 86 146 86Z" fill="#8fdcc4" stroke="#5fb79c" stroke-width="2"/>
+                    <path d="M150 84 C160 74 172 68 184 66" fill="none" stroke="#4e9c88" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M118 152 C152 130 208 130 242 152 C226 174 134 174 118 152Z" fill="#6fbca9" opacity=".85" stroke="#4e9c88" stroke-width="2.5"/>
+                    <path d="M96 214 q-18 14 4 30 M264 214 q18 14 -4 30" fill="none" stroke="#9fe0cf" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+                    <path d="M88 258 q-20 12 6 26 M272 258 q20 12 -6 26" fill="none" stroke="#9fe0cf" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>
+                  </g>
+
+                  <!-- 岩之契约：金色宝石 + 大衣领 -->
+                  <g id="outfit-geo" class="outfit-group">
+                    <path d="M116 156 C140 140 220 140 244 156 L228 190 C202 178 158 178 132 190Z" fill="#8a5a2b" opacity=".55" stroke="#6f451f" stroke-width="2"/>
+                    <path d="M180 198 L198 220 L180 248 L162 220Z" fill="#eec67f" stroke="#b98c4a" stroke-width="2.5"/>
+                    <path d="M172 212 l6 -12 6 12" fill="none" stroke="#fff3d0" stroke-width="2" stroke-linecap="round"/>
+                    <circle cx="212" cy="108" r="6" fill="#eec67f" stroke="#b98c4a" stroke-width="2"/>
+                  </g>
+
+                  <!-- 火花骑士：贝雷帽 + 四叶草 + 火花果 -->
+                  <g id="outfit-spark" class="outfit-group">
+                    <ellipse cx="180" cy="88" rx="60" ry="20" fill="#e5533d" stroke="#b73a28" stroke-width="2.5"/>
+                    <path d="M122 88 Q180 106 238 88" fill="none" stroke="#fbe1d6" stroke-width="4" stroke-linecap="round"/>
+                    <g transform="translate(224 78)">
+                      <circle cx="-4" cy="-4" r="4.5" fill="#4caf7d"/><circle cx="4" cy="-4" r="4.5" fill="#4caf7d"/>
+                      <circle cx="-4" cy="4" r="4.5" fill="#4caf7d"/><circle cx="4" cy="4" r="4.5" fill="#4caf7d"/>
+                    </g>
+                    <circle cx="242" cy="256" r="16" fill="#f7d04a" stroke="#e0a63a" stroke-width="2.5"/>
+                    <path d="M242 240 q4 -8 12 -8" fill="none" stroke="#c98a3a" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M238 254 l3 5 5 3 -5 3 -3 5 -3 -5 -5 -3 5 -3z" fill="#fff3c4"/>
+                  </g>
+
+                  <!-- 雷光之影：发簪 + 闪电 + 眼影 -->
+                  <g id="outfit-thunder" class="outfit-group">
+                    <path d="M150 84 C146 66 150 54 158 46 C160 60 158 74 156 86Z" fill="#c8b2ff" stroke="#8f74d8" stroke-width="2"/>
+                    <path d="M210 84 C214 66 210 54 202 46 C200 60 202 74 204 86Z" fill="#c8b2ff" stroke="#8f74d8" stroke-width="2"/>
+                    <path d="M216 100 L206 134 L214 134 L202 170 L222 136 L214 136 L226 100Z" fill="#ffe9a8" stroke="#e6c14a" stroke-width="2"/>
+                    <ellipse cx="216" cy="176" rx="18" ry="21" fill="#c8b2ff" opacity=".22"/>
+                  </g>
+
+                  <!-- 小小侦探：眼镜 + 蝴蝶结 + 西装领 -->
+                  <g id="outfit-detective" class="outfit-group">
+                    <circle cx="144" cy="176" r="19" fill="none" stroke="#4f6b9c" stroke-width="3.5"/>
+                    <circle cx="216" cy="176" r="19" fill="none" stroke="#4f6b9c" stroke-width="3.5"/>
+                    <path d="M163 172 Q180 166 197 172" fill="none" stroke="#4f6b9c" stroke-width="3.5"/>
+                    <path d="M120 206 L168 232 L192 232 L240 206 L224 262 Q180 280 136 262Z" fill="#3f5a88" stroke="#2f4468" stroke-width="2.5"/>
+                    <path d="M180 232 l-12 10 12 -2 12 2z" fill="#ff5d7e" stroke="#d84a68" stroke-width="2"/>
+                  </g>
+
+                  <!-- 奶团小龙：小龙角 + 圆耳朵 + 尾巴 -->
+                  <g id="outfit-dragon" class="outfit-group">
+                    <path d="M128 108 C122 88 128 74 140 66 C140 82 136 98 132 110Z" fill="#ffd978" stroke="#e6bd5f" stroke-width="2"/>
+                    <path d="M232 108 C238 88 232 74 220 66 C220 82 224 98 228 110Z" fill="#ffd978" stroke="#e6bd5f" stroke-width="2"/>
+                    <circle cx="126" cy="150" r="15" fill="#ffedb8" stroke="#e6bd5f" stroke-width="2.5"/>
+                    <circle cx="234" cy="150" r="15" fill="#ffedb8" stroke="#e6bd5f" stroke-width="2.5"/>
+                    <path d="M286 240 C312 232 326 254 316 282 C308 300 288 304 284 288" fill="none" stroke="#ffd978" stroke-width="20" stroke-linecap="round"/>
+                    <path d="M312 272 l14 -6 M312 272 l10 12" stroke="#ffd978" stroke-width="6" stroke-linecap="round"/>
+                  </g>
+
+                  <!-- 星灵之辉：星冠 + 星光 -->
+                  <g id="outfit-stellar" class="outfit-group">
+                    <path d="M180 48 C185 60 191 66 204 71 C191 76 185 82 180 96 C175 82 169 76 156 71 C169 66 175 60 180 48Z" fill="#e9ddff" stroke="#8f74d8" stroke-width="2.5"/>
+                    <path d="M180 58 L180 86" fill="none" stroke="#fff" stroke-width="1.6" opacity=".7"/>
+                    <path d="M96 150 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#fff0a8"/>
+                    <path d="M268 138 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#fff"/>
+                    <path d="M120 262 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#e9ddff"/>
+                    <path d="M240 262 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#e9ddff"/>
+                  </g>
+
+                  <!-- 火之执政：烈焰冠冕 + 肩甲 + 火星 -->
+                  <g id="outfit-firelord" class="outfit-group">
+                    <path d="M132 88 C130 66 142 50 162 52 C178 54 184 66 180 88 C176 66 184 50 200 52 C220 54 230 66 228 88 Z" fill="#ff7a4d" stroke="#d9532f" stroke-width="2.5"/>
+                    <path d="M150 84 C152 64 162 54 178 56" fill="none" stroke="#ffd9a8" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M212 84 C210 64 200 54 184 56" fill="none" stroke="#ffd9a8" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M104 150 Q122 138 140 150 L128 172 Q112 168 104 150Z" fill="#f7b733" stroke="#d98a1f" stroke-width="2.5"/>
+                    <path d="M256 150 Q238 138 220 150 L232 172 Q248 168 256 150Z" fill="#f7b733" stroke="#d98a1f" stroke-width="2.5"/>
+                    <path d="M96 200 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffd9a8"/>
+                    <path d="M268 200 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffb07a"/>
+                  </g>
+
+                  <!-- 水之舞台：礼帽 + 气泡 + 水丝带 -->
+                  <g id="outfit-hydro" class="outfit-group">
+                    <path d="M148 66 L152 34 L208 34 L212 66 Z" fill="#4d9fd6" stroke="#2f6f9f" stroke-width="2.5"/>
+                    <ellipse cx="180" cy="66" rx="46" ry="10" fill="#6fc4f0" stroke="#2f6f9f" stroke-width="2.5"/>
+                    <path d="M180 42 L180 60" fill="none" stroke="#b8e4ff" stroke-width="3"/>
+                    <circle cx="124" cy="120" r="7" fill="#c4e8ff" stroke="#6fc4f0" stroke-width="1.6"/>
+                    <circle cx="236" cy="110" r="5" fill="#c4e8ff" stroke="#6fc4f0" stroke-width="1.6"/>
+                    <circle cx="262" cy="150" r="3.5" fill="#c4e8ff" stroke="#6fc4f0" stroke-width="1.4"/>
+                    <path d="M96 220 q-20 16 -4 34 M120 214 q-22 18 -6 38" fill="none" stroke="#8fd0f2" stroke-width="4" stroke-linecap="round"/>
+                  </g>
+
+                  <!-- 草之智慧：新芽王冠 + 浮叶 -->
+                  <g id="outfit-dendro" class="outfit-group">
+                    <path d="M180 52 C170 44 160 46 158 58 C166 58 176 58 180 52Z" fill="#7fd0a0" stroke="#4fa877" stroke-width="2"/>
+                    <path d="M180 52 C190 44 200 46 202 58 C194 58 184 58 180 52Z" fill="#a8e3bd" stroke="#4fa877" stroke-width="2"/>
+                    <path d="M180 52 C180 40 180 36 180 32 C180 40 180 46 180 52Z" fill="#b4ecd0" stroke="#4fa877" stroke-width="2"/>
+                    <path d="M104 112 C114 102 126 102 132 112 C120 114 110 114 104 112Z" fill="#9be0b8" stroke="#4fa877" stroke-width="2"/>
+                    <path d="M118 118 L120 108" fill="none" stroke="#4fa877" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M240 268 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#c9f0cf"/>
+                  </g>
+
+                  <!-- 水之刃：水刃 + 面纹 + 围巾 -->
+                  <g id="outfit-tide" class="outfit-group">
+                    <path d="M270 196 C292 190 304 204 296 222 C290 236 274 236 268 224 C278 220 280 206 270 196Z" fill="#5c9ce0" stroke="#3f7cc0" stroke-width="2.5"/>
+                    <path d="M272 202 C280 204 284 214 278 220" fill="none" stroke="#cfe6ff" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M150 152 q8 -6 16 0 M196 152 q8 -6 16 0" fill="none" stroke="#3f7cc0" stroke-width="2" opacity=".5"/>
+                    <path d="M110 236 Q178 272 246 236" fill="none" stroke="#ff7a4d" stroke-width="12" stroke-linecap="round"/>
+                    <path d="M228 248 l14 32 l16 -7 l-12 -32" fill="#ff7a4d" stroke="#d9532f" stroke-width="2" stroke-linejoin="round"/>
+                  </g>
+
+                  <!-- 蛛网侠：额纹 + 蛛网 + 蛛丝 -->
+                  <g id="outfit-spider" class="outfit-group">
+                    <path d="M180 96 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z" fill="#d63f3f" stroke="#9e2323" stroke-width="2"/>
+                    <path d="M120 120 Q180 106 240 120 M132 150 Q180 140 228 150 M150 178 Q180 170 210 178" fill="none" stroke="#d63f3f" stroke-width="1.8" opacity=".5"/>
+                    <path d="M120 120 Q104 160 96 208 M240 120 Q256 160 264 208" fill="none" stroke="#9e2323" stroke-width="2" opacity=".55"/>
+                    <path d="M92 252 q-18 12 -2 30" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M96 242 l6 -2 M88 254 l6 -2 M94 262 l6 -2" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
+                  </g>
+
+                  <!-- 小企鹅：燕尾帽 + 喙 + 鳍 -->
+                  <g id="outfit-penguin" class="outfit-group">
+                    <path d="M120 108 C128 80 232 80 240 108 C232 96 128 96 120 108Z" fill="#2f3a4a" stroke="#1f2836" stroke-width="2.5"/>
+                    <path d="M172 138 L188 138 L180 150 Z" fill="#ffb347" stroke="#e08a2a" stroke-width="2"/>
+                    <path d="M88 168 C78 178 80 196 92 202 C96 192 94 178 88 168Z" fill="#3a4657" stroke="#2a3444" stroke-width="2"/>
+                    <path d="M272 168 C282 178 280 196 268 202 C264 192 266 178 272 168Z" fill="#3a4657" stroke="#2a3444" stroke-width="2"/>
+                    <circle cx="150" cy="146" r="2.5" fill="#fff"/><circle cx="210" cy="146" r="2.5" fill="#fff"/>
+                  </g>
+
+                  <!-- 白羽骑士：羽饰 + 盔带 + 盾 -->
+                  <g id="outfit-knight" class="outfit-group">
+                    <path d="M180 46 C170 40 162 44 160 56 C170 54 180 54 180 46Z" fill="#ffffff" stroke="#b8c8f0" stroke-width="2"/>
+                    <path d="M180 46 C190 40 198 44 200 56 C190 54 180 54 180 46Z" fill="#eef3ff" stroke="#b8c8f0" stroke-width="2"/>
+                    <path d="M112 140 Q180 122 248 140" fill="none" stroke="#c7d4f2" stroke-width="10" stroke-linecap="round"/>
+                    <path d="M112 140 Q180 128 248 140" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M256 208 q16 10 4 26 q-14 10 -22 -2 q-6 -12 8 -20z" fill="#e4ecff" stroke="#8a9ad0" stroke-width="2.5"/>
+                    <path d="M262 214 l6 -2 M262 222 l6 -2" stroke="#8a9ad0" stroke-width="2" stroke-linecap="round"/>
+                  </g>
+
+                  <!-- 星夜魔女：尖帽 + 月牙胸针 + 星尘 -->
+                  <g id="outfit-witch" class="outfit-group">
+                    <path d="M126 96 C130 52 166 30 206 42 C222 50 232 66 236 92 C224 92 138 96 126 96Z" fill="#b28ef0" stroke="#8a6cd6" stroke-width="2.5"/>
+                    <ellipse cx="182" cy="96" rx="58" ry="12" fill="#d0bcff" stroke="#8a6cd6" stroke-width="2.5"/>
+                    <path d="M180 46 L178 66 M180 52 L182 66" stroke="#e3d4ff" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M180 206 C172 198 174 188 180 188 C186 188 188 198 180 206Z" fill="#ffd86b" stroke="#e0a63a" stroke-width="2"/>
+                    <path d="M104 160 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#e3d4ff"/>
+                    <path d="M256 158 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#fff"/>
+                  </g>
+                </g>
+              </svg>
+
+            </div>
+          </div>
+          <div class="pet-shadow" id="petShadow"></div>
+        </div>
+
+        <div class="nameplate">
+          <div class="nameplate-main">
+            <b id="nameLabel">糯糯</b>
+            <span id="formLabel">嫩芽团</span>
+          </div>
+          <div class="xp-track"><span id="xpFill"></span></div>
+          <div class="xp-meta">
+            <span id="xpText">120 / 170 XP</span>
+            <span class="wallet">
+              <span class="coins">🌱 <b id="coinCount">18</b></span>
+              <span class="tickets">⚡ <b id="staminaMini">80</b></span>
+            </span>
+          </div>
+        </div>
+
+        <div class="pet-actions">
+          <button class="round-action" data-action="pet" title="摸摸头 · 羽毛逗猫棒">💗</button>
+          <button class="round-action" data-action="feed" title="喂布丁 · 布丁">🍮</button>
+          <button class="round-action" data-action="play" title="玩小球 · 玩具球">🎾</button>
+        </div>
+      </div>
+
+      <div class="dock" id="dock">
+        <button class="dock-btn active" data-tab="study"><span>📖</span><small>学习</small></button>
+        <button class="dock-btn" data-tab="call"><span>📞</span><small>通话</small></button>
+        <button class="dock-btn" data-tab="dress"><span>🎀</span><small>装扮</small></button>
+        <button class="dock-btn" data-tab="interact"><span>🫧</span><small>互动</small></button>
+        <button class="dock-btn" data-tab="park"><span>🏕️</span><small>乐园</small></button>
+        <button class="dock-btn" id="dockHide" title="隐藏面板"><span>🫥</span><small>隐藏</small></button>
+      </div>
+
+      <button class="desktop-exit" id="desktopExit" title="退出桌面模式">✕ 退出桌面模式</button>
+    </section>
+
+    <aside class="panel" id="panel">
+      <div class="panel-head">
+        <div class="mini-face" aria-hidden="true">
+          <i class="mf-eye left"></i><i class="mf-eye right"></i><i class="mf-blush left"></i><i class="mf-blush right"></i>
+        </div>
+        <div class="panel-id">
+          <h2><span id="panelName">糯糯</span> <span class="level-badge" id="levelBadge">Lv.3</span></h2>
+          <p id="panelSub">嫩芽团 · 今天也要加油</p>
+        </div>
+        <button class="icon-btn" id="panelClose" title="收起面板">✕</button>
+      </div>
+
+      <div class="panel-xp">
+        <div class="panel-xp-bar"><span id="panelXpFill"></span></div>
+        <span id="panelXpText">120 / 170</span>
+      </div>
+
+      <nav class="tabs" role="tablist">
+        <button class="tab active" data-tab="study" role="tab"><span>📖</span>学习</button>
+        <button class="tab" data-tab="call" role="tab"><span>📞</span>通话</button>
+        <button class="tab" data-tab="dress" role="tab"><span>🎀</span>装扮</button>
+        <button class="tab" data-tab="interact" role="tab"><span>🫧</span>互动</button>
+        <button class="tab" data-tab="park" role="tab"><span>🏕️</span>乐园</button>
+      </nav>
+
+      <div class="panel-body" id="panelBody">
+
+        <!-- 学习 / 应用1 -->
+        <section class="tab-panel active" data-panel="study">
+          <div class="connection">
+            <span class="link-dot"></span>
+            <div>
+              <b>应用1 · 答题</b>
+              <small>已连接 · 实时同步答题事件</small>
+            </div>
+            <span class="mode-badge">练习模式</span>
+          </div>
+
+          <div class="stat-row">
+            <div class="mini-stat"><b id="streakStat">0</b><span>连对</span></div>
+            <div class="mini-stat"><b id="todayXp">0</b><span>今日 XP</span></div>
+            <div class="mini-stat"><b id="accuracyStat">—</b><span>正确率</span></div>
+          </div>
+
+          <div class="q-card">
+            <div class="q-head">
+              <span class="subject" id="qSubject">数学 · 二次函数</span>
+              <span class="q-index" id="qIndex">第 1 题</span>
+            </div>
+            <p class="q-stem" id="qStem">加载中…</p>
+            <div class="options" id="options"></div>
+            <div class="q-actions">
+              <button class="soft-btn" id="hintBtn">💡 糯糯提示</button>
+              <button class="primary-btn" id="nextBtn" disabled>下一题 →</button>
+            </div>
+          </div>
+
+          <div class="feedback" id="feedback" hidden>
+            <div class="fb-icon" id="fbIcon">✓</div>
+            <div>
+              <b id="fbTitle">答对啦！</b>
+              <p id="fbText"></p>
+            </div>
+          </div>
+
+          <div class="tip-card" id="tipCard">
+            <div class="tip-head">
+              <span>✦ 技巧提醒</span>
+              <button class="icon-btn small" id="speakTip" title="让糯糯读出来">🔊</button>
+            </div>
+            <p id="tipText">先自己做，卡住了再点「糯糯提示」。答题后这里会留下这道题的技巧。</p>
+          </div>
+
+          <div class="wrongbook">
+            <div class="section-title"><span>错题本</span><small id="wrongCount">0 题</small></div>
+            <div class="wrong-list" id="wrongList">
+              <p class="empty">还没有错题，继续保持～</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 通话 / 应用2 -->
+        <section class="tab-panel" data-panel="call">
+          <div class="connection">
+            <span class="link-dot"></span>
+            <div>
+              <b>应用2 · 实时答疑</b>
+              <small>已连接 · 语音低延迟通道</small>
+            </div>
+            <span class="mode-badge">免提</span>
+          </div>
+
+          <div class="call-stage" id="callStage">
+            <div class="call-ring r1"></div>
+            <div class="call-ring r2"></div>
+            <div class="call-ring r3"></div>
+            <button class="call-btn" id="callBtn" aria-label="开始或结束通话">
+              <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="2.5" width="6" height="11" rx="3"></rect>
+                <path d="M5.5 10.5a6.5 6.5 0 0 0 13 0"></path>
+                <path d="M12 17v4.5"></path>
+                <path d="M8.5 21.5h7"></path>
+              </svg>
+            </button>
+            <div class="wave" id="wave" aria-hidden="true"></div>
+          </div>
+
+          <p class="call-state" id="callState">轻触麦克风，和糯糯说说话</p>
+
+          <div class="call-tools">
+            <button class="soft-btn" id="interruptBtn">✋ 打断</button>
+            <button class="soft-btn" id="muteBtn">🔊 声音开</button>
+            <button class="soft-btn" id="subBtn">💬 字幕开</button>
+          </div>
+
+          <div class="transcript" id="transcript">
+            <div class="msg pet">
+              <span class="msg-avatar">糯</span>
+              <div class="msg-bubble">嗨，我在呢。做题卡住了，或者只是想歇一会儿，都可以直接和我说。</div>
+            </div>
+          </div>
+
+          <div class="suggest-row" id="suggestRow">
+            <button class="chip-btn">这道题为什么选 B？</button>
+            <button class="chip-btn">给我一个解题技巧</button>
+            <button class="chip-btn">我有点累了</button>
+          </div>
+
+          <p class="fine-print">原型内置模拟对话；接入应用2后由实时 ASR → LLM → TTS 管线接管。默认按键说话，录音不落盘。</p>
+        </section>
+
+        <!-- 装扮 -->
+        <section class="tab-panel" data-panel="dress">
+          <div class="section-title"><span>形象</span><small>每种都有小动作</small></div>
+          <div class="species-grid" id="speciesGrid"></div>
+
+          <div class="section-title"><span>角色皮肤</span><small>原创灵感造型 · 升级解锁</small></div>
+          <div class="outfit-grid" id="outfitGrid"></div>
+          <div class="custom-skin-row">
+            <input type="file" id="customSkinInput" accept="image/*" hidden>
+            <button class="soft-btn tiny" id="customSkinClear" type="button">🗑️ 清除自定义形象</button>
+          </div>
+
+          <div class="section-title"><span>主题皮肤</span><small>随等级解锁</small></div>
+          <div class="theme-grid" id="themeGrid"></div>
+
+          <div class="section-title"><span>配饰</span><small>可叠加</small></div>
+          <div class="acc-grid" id="accGrid"></div>
+
+          <div class="section-title"><span>瞳色</span><small>细节也要可爱</small></div>
+          <div class="eye-row" id="eyeRow"></div>
+
+          <div class="setting-row">
+            <label for="sizeRange">桌宠大小</label>
+            <input type="range" id="sizeRange" min="80" max="125" step="5" value="100">
+            <output id="sizeOut">100%</output>
+          </div>
+
+          <div class="setting-row">
+            <label for="nameInput">名字</label>
+            <input type="text" id="nameInput" maxlength="8" value="糯糯" placeholder="给团子起个名字">
+            <button class="soft-btn tiny" id="nameSave">保存</button>
+          </div>
+
+          <div class="section-title"><span>进化路线</span><small>答题得分自动成长</small></div>
+          <div class="evo-track" id="evoTrack"></div>
+          <p class="fine-print">每一阶都会改变轮廓与光效，而不只是换色。更高等级还会解锁新的配饰槽与出场动画。</p>
+        </section>
+
+        <!-- 互动 -->
+        <section class="tab-panel" data-panel="interact">
+          <div class="section-title"><span>糯糯的状态</span><small>答题赚星芽币 · 买道具互动</small></div>
+          <div class="stat-bars">
+            <div class="stat-line">
+              <span>亲密度</span>
+              <div class="bar"><i id="barIntimacy"></i></div>
+              <b id="valIntimacy">68</b>
+            </div>
+            <div class="stat-line">
+              <span>饱食度</span>
+              <div class="bar"><i id="barHunger"></i></div>
+              <b id="valHunger">72</b>
+            </div>
+            <div class="stat-line">
+              <span>心情</span>
+              <div class="bar"><i id="barMood"></i></div>
+              <b id="valMood">82</b>
+            </div>
+            <div class="stat-line">
+              <span>体力</span>
+              <div class="bar"><i id="barStamina"></i></div>
+              <b id="valStamina">80</b>
+            </div>
+          </div>
+
+          <div class="section-title"><span>道具背包</span><small>点击道具即可使用</small></div>
+          <div class="item-grid" id="bagGrid"></div>
+
+          <div class="section-title"><span>道具商店</span><small>🌱 星芽币 <b id="shopCoins">18</b></small></div>
+          <div class="item-grid" id="shopGrid"></div>
+
+          <div class="section-title"><span>互动</span><small>互动会消耗对应道具</small></div>
+          <div class="action-grid">
+            <button class="action-tile" data-action="pet"><span>💗</span><b>摸摸头</b><small>羽毛棒 · +亲密</small></button>
+            <button class="action-tile" data-action="feed"><span>🍮</span><b>喂布丁</b><small>布丁 · +饱食</small></button>
+            <button class="action-tile" data-action="play"><span>🎾</span><b>玩小球</b><small>玩具球 · +心情</small></button>
+            <button class="action-tile" data-action="tickle"><span>🪶</span><b>挠痒痒</b><small>羽毛棒 · +亲密</small></button>
+            <button class="action-tile" data-action="story"><span>📖</span><b>听故事</b><small>故事书 · +心情</small></button>
+            <button class="action-tile" data-action="sleep"><span>🌙</span><b id="sleepLabel">哄睡</b><small>免费 · 挂机休息</small></button>
+            <button class="action-tile" data-action="focus"><span>⏱️</span><b id="focusLabel">专注 25 分钟</b><small>免费 · 番茄钟</small></button>
+            <button class="action-tile" data-action="talk"><span>💬</span><b>随便聊聊</b><small>免费 · 打开通话</small></button>
+          </div>
+
+          <div class="section-title"><span>桌面行为</span><small>桌面版生效</small></div>
+          <label class="switch-row">
+            <span><b>窗口置顶</b><small>始终悬浮在其他窗口之上</small></span>
+            <input type="checkbox" id="tgTop" checked><i class="switch"></i>
+          </label>
+          <label class="switch-row">
+            <span><b>鼠标穿透</b><small>锁定后点击会穿过桌宠，不影响做题</small></span>
+            <input type="checkbox" id="tgThrough"><i class="switch"></i>
+          </label>
+          <label class="switch-row">
+            <span><b>空闲唠叨</b><small>偶尔冒一句话，但不打断专注</small></span>
+            <input type="checkbox" id="tgChatter" checked><i class="switch"></i>
+          </label>
+          <label class="switch-row">
+            <span><b>音效</b><small>点击、答对、升级的软萌音效</small></span>
+            <input type="checkbox" id="tgSound" checked><i class="switch"></i>
+          </label>
+
+          <button class="text-btn" id="resetBtn">重置演示数据</button>
+        </section>
+
+        <!-- 宠物乐园（模拟联机） -->
+        <section class="tab-panel" data-panel="park">
+          <div class="section-title"><span>宠物乐园</span><small>模拟联机 · 线下也能玩</small></div>
+          <div class="park-scene" id="parkScene">
+            <div class="park-sky"><span class="park-sun">🌤️</span><span class="park-cloud c1">☁️</span><span class="park-cloud c2">☁️</span></div>
+            <div class="park-ground"></div>
+            <div class="park-me">🫧<small>糯糯</small></div>
+            <div class="park-visitors" id="parkVisitors"></div>
+          </div>
+          <div class="park-actions">
+            <button class="soft-btn" id="parkRefresh">🔄 换一批访客</button>
+            <button class="soft-btn" id="parkPhotoBtn">📸 拍合照</button>
+          </div>
+          <div class="park-log" id="parkLog"><p class="empty">点小伙伴打招呼、送礼或猜拳吧～</p></div>
+
+          <div class="section-title"><span>猜拳小游戏</span><small>赢了有星芽币奖励</small></div>
+          <div class="rps-row" id="rpsRow">
+            <button class="rps-btn" data-hand="rock">✊</button>
+            <button class="rps-btn" data-hand="paper">✋</button>
+            <button class="rps-btn" data-hand="scissors">✌️</button>
+          </div>
+          <div class="rps-result" id="rpsResult"></div>
+
+          <div class="section-title"><span>好友联机</span><small>不同设备输入相同房间码即可</small></div>
+          <div class="mp-card">
+            <div class="mp-row">
+              <button class="soft-btn" id="mpHost" type="button">🎫 创建房间</button>
+              <input type="text" id="mpCode" maxlength="6" placeholder="房间码" inputmode="text">
+              <button class="soft-btn" id="mpJoin" type="button">加入</button>
+            </div>
+            <div class="mp-status" id="mpStatus">未连接</div>
+            <div class="mp-peers" id="mpPeers"></div>
+            <div class="mp-actions" id="mpActions" hidden>
+              <button data-mp="hi">👋 打招呼</button>
+              <button data-mp="gift">🎁 送礼</button>
+              <button data-mp="emoji">✨ 表情</button>
+              <button data-mp="chat">💬 聊天</button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </aside>
+  </main>
+</div>
+
+<button class="reopen-btn" id="reopenBtn" title="打开面板">✦</button>
+
+<div class="fx" id="fx" aria-hidden="true"></div>
+
+<div class="levelup" id="levelup" role="dialog" aria-modal="true" aria-labelledby="levelupTitle">
+  <div class="levelup-card">
+    <div class="confetti" id="confetti"></div>
+    <div class="levelup-kicker">LEVEL UP</div>
+    <div class="levelup-num" id="levelupNum">Lv.4</div>
+    <h2 id="levelupTitle">进化成「星星团」</h2>
+    <p id="levelupText">解锁星星发夹、星夜主题与小鹿团</p>
+    <div class="levelup-rewards" id="levelupRewards"></div>
+    <button class="primary-btn wide" id="levelupBtn">继续学习 ✦</button>
+  </div>
+</div>
+
+<div class="download-modal" id="downloadModal" role="dialog" aria-modal="true" aria-labelledby="downloadTitle">
+  <div class="download-card">
+    <button class="icon-btn download-close" id="downloadClose" aria-label="关闭下载弹窗">✕</button>
+    <div class="download-copy">
+      <span class="download-kicker">知芽 SPROUT · MOBILE</span>
+      <h2 id="downloadTitle">先在手机上打开知芽</h2>
+      <p>当前环境没有稳定的公网域名，扫码安装会失效。请下载离线单文件，用手机浏览器打开；需要扫码安装时，把项目部署到自己的 HTTPS 域名后再生成二维码。</p>
+      <div class="download-platforms">
+        <span>Android</span>
+        <span>iPhone / iPad</span>
+        <span>无需网络</span>
+      </div>
+      <div class="download-actions">
+        <a class="primary-btn" href="zhiya-offline.html" download>下载离线版</a>
+        <a class="soft-btn" href="README.md" target="_blank" rel="noopener">部署 / 二维码</a>
+      </div>
+      <ol class="install-steps">
+        <li>下载 `zhiya-offline.html`，发到手机。</li>
+        <li>用 Chrome 或 Safari 打开文件；Android 选“用浏览器打开”。</li>
+        <li>离线也能用；要安装到主屏，请部署到 HTTPS 后按 README 生成二维码。</li>
+      </ol>
+      <p class="download-note">离线单文件不依赖网络、服务器或二维码；扫码安装需正式 HTTPS 域名。</p>
+    </div>
+    <div class="offline-panel">
+      <div class="offline-icon">📦</div>
+      <b>离线单文件</b>
+      <span>zhiya-offline.html</span>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="app.js?v=4"></script>
+</body>
+</html>
