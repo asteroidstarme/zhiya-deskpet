@@ -1439,7 +1439,7 @@ body.desktop-mode .pet-position:hover .pet-svg{filter:drop-shadow(0 26px 34px rg
   .stage-decor .hc2{width:460px;height:460px;}
   .stage-tip,.daily-card,.dock,.pet-actions,.desktop-exit,.desktop-clock,.desktop-entry{display:none !important;}
   .pet-zone{inset:0;}
-  .pet-position{width:232px;height:232px;}
+  .pet-position{width:200px;height:200px;}
   .pet-svg{filter:drop-shadow(0 16px 22px rgba(168,120,200,.14));}
   .pet-shadow{bottom:-8px;width:150px;height:22px;}
   .lv-pill{
@@ -1453,13 +1453,13 @@ body.desktop-mode .pet-position:hover .pet-svg{filter:drop-shadow(0 26px 34px rg
   }
   .bubble-tail{bottom:-7px;width:14px;height:14px;}
   .nameplate{
-    left:50%;top:auto;transform:translateX(-50%);
-    width:196px;bottom:8px;padding:8px 11px 7px;border-radius:14px;
+    left:6px;top:50%;transform:translateY(-50%);
+    width:120px;bottom:auto;padding:8px 9px 7px;border-radius:14px;
   }
-  .nameplate-main b{font-size:12.5px;}
-  .nameplate-main span{font-size:9px;}
-  .xp-track{height:5px;margin-top:6px;}
-  .xp-meta{font-size:8px;margin-top:4px;}
+  .nameplate-main b{font-size:11px;}
+  .nameplate-main span{font-size:8px;}
+  .xp-track{height:4px;margin-top:4px;}
+  .xp-meta{font-size:7px;margin-top:3px;gap:3px;}
 
   .panel{
     flex:1 1 auto;width:100%;min-height:0;
@@ -1535,10 +1535,10 @@ body.desktop-mode .pet-position:hover .pet-svg{filter:drop-shadow(0 26px 34px rg
 
 @media (max-width:760px) and (max-height:720px){
   .stage{flex-basis:45dvh;height:45dvh;}
-  .pet-position{width:196px;height:196px;}
+  .pet-position{width:168px;height:168px;}
   .bubble{top:2.5%;max-width:196px;font-size:10.5px;padding:8px 10px;}
-  .nameplate{width:176px;bottom:6px;padding:7px 9px 6px;}
-  .nameplate-main b{font-size:11.5px;}
+  .nameplate{width:112px;padding:7px 8px 6px;}
+  .nameplate-main b{font-size:10px;}
   .lv-pill{font-size:9px;padding:5px 9px;}
   .panel-head{padding-top:10px;}
   .tabs{margin-top:6px;}
