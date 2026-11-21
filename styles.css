@@ -393,7 +393,7 @@ button{color:inherit;}
 }
 
 .nameplate{
-  position:absolute;left:50%;bottom:104px;transform:translateX(-50%);
+  position:absolute;left:50%;bottom:70px;transform:translateX(-50%);
   z-index:6;width:272px;
   padding:11px 15px 10px;border-radius:18px;
   background:rgba(255,255,255,.66);
@@ -1346,7 +1346,7 @@ body.desktop-mode .pet-position:hover .pet-svg{filter:drop-shadow(0 26px 34px rg
 @media (max-width:1240px){
   .panel{flex-basis:376px;width:376px;}
   .pet-position{width:330px;height:330px;}
-  .nameplate{width:250px;bottom:100px;}
+  .nameplate{width:250px;bottom:70px;}
   .top-actions .chip:nth-child(2){display:none;}
 }
 @media (max-width:1060px){
